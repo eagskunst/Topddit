@@ -63,7 +63,7 @@ class PostsListActivity : InjectionActivity() {
     }
 
     @Composable
-    private fun PostsLists(posts: List<PostViewState.Post>) {
+    private fun PostsLists(posts: List<Post>) {
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             items(posts.size, key = { posts[it].id }) { idx ->
                 Post(post = posts[idx])

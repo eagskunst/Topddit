@@ -8,8 +8,8 @@ class ChildrenDataModelToContentMapper : Mapper<ChildrenDataModel, ContentEntity
     override suspend fun map(value: ChildrenDataModel): ContentEntity {
         return ContentEntity(
             selfText = value.selftext,
-            imagesUrls = null,
-            videoUrl = null,
+            imagesUrls = value.preview?.images?.firstOrNull()?.resolutions?.map { it.url },
+            videoUrl = value.media?.redditVideo?.fallbackUrl,
         )
     }
 }

@@ -16,7 +16,7 @@ import timber.log.Timber
 class PostListViewModel(
     private val savedStateHandle: SavedStateHandle,
     private val getPosts: GetPosts,
-    private val mapper: Mapper<PostEntity, PostViewState.Post>,
+    private val mapper: Mapper<PostEntity, Post>,
 ) : ViewModel() {
     private val _posts = MutableLiveData<PostViewState>(PostViewState.Loading())
     val posts = _posts as LiveData<PostViewState>
@@ -33,14 +33,14 @@ class PostListViewModel(
         }
     }
 
-    private fun addAndPostNewPosts(newPosts: List<PostViewState.Post>) {
+    private fun addAndPostNewPosts(newPosts: List<Post>) {
         val loadedPosts = getLoadedPosts()
         _posts.value = PostViewState.Posts(loadedPosts + newPosts)
         savedStateHandle["lastPostId"] = newPosts.lastOrNull()?.id
         Timber.d("Posts Result: ${posts.value}")
     }
 
-    private fun getLoadedPosts(): List<PostViewState.Post> {
+    private fun getLoadedPosts(): List<Post> {
         val loadedPosts =
             when (val currentState = _posts.value) {
                 is PostViewState.GeneralError -> currentState.posts ?: listOf()

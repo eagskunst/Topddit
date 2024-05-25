@@ -93,8 +93,6 @@ data class ChildrenDataModel(
     val media: MediaModel?,
     @SerialName("media_embed")
     val mediaEmbed: MediaEmbedModel?,
-    @SerialName("media_metadata")
-    val mediaMetadata: Map<String, MediaMetadataModel>? = null,
     @SerialName("media_only")
     val mediaOnly: Boolean,
     @SerialName("name")
@@ -173,4 +171,6 @@ data class ChildrenDataModel(
     val whitelistStatus: String?,
     @SerialName("wls")
     val wls: Int?,
+    @SerialName("sr_detail")
+    val subredditDetail: SubredditDetailModel? = null,
 )

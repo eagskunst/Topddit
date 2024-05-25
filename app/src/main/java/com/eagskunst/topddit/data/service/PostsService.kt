@@ -9,5 +9,7 @@ interface PostsService {
     suspend fun getTopPosts(
         @Query(value = "after", encoded = true) lastPostId: String?,
         @Query(value = "limit", encoded = true) limit: Int = 10,
+        @Query(value = "sr_detail", encoded = true) type: Int = 1,
+        @Query(value = "raw_json", encoded = true) rawJson: Int = 1,
     ): PostsListModel
 }

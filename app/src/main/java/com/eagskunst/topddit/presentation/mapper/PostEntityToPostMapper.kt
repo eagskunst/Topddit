@@ -3,23 +3,29 @@ package com.eagskunst.topddit.presentation.mapper
 import android.icu.text.CompactDecimalFormat
 import android.text.format.DateUtils
 import com.eagskunst.topddit.common.Mapper
+import com.eagskunst.topddit.domain.entity.ContentEntity
 import com.eagskunst.topddit.domain.entity.PostEntity
-import com.eagskunst.topddit.presentation.post.list.PostViewState
+import com.eagskunst.topddit.domain.entity.SubredditEntity
+import com.eagskunst.topddit.presentation.post.list.Content
+import com.eagskunst.topddit.presentation.post.list.Post
+import com.eagskunst.topddit.presentation.post.list.Subreddit
 import java.util.Locale
 
-class PostEntityToPostMapper : Mapper<PostEntity, PostViewState.Post> {
+class PostEntityToPostMapper(
+    private val contentEntityToViewObjectMapper: Mapper<ContentEntity, Content>,
+    private val subredditEntityToViewObjectMapper: Mapper<SubredditEntity, Subreddit>,
+) : Mapper<PostEntity, Post> {
     private val compactDecimalFormat =
         CompactDecimalFormat.getInstance(
             Locale.getDefault(),
             CompactDecimalFormat.CompactStyle.SHORT,
         )
 
-    override suspend fun map(value: PostEntity): PostViewState.Post {
+    override suspend fun map(value: PostEntity): Post {
         return value.run {
-            PostViewState.Post(
+            Post(
                 id = id,
                 title = title,
-                subredditName = subreddit,
                 authorName = author,
                 upVotesRelativeCount = compactDecimalFormat.format(upVotes),
                 commentsRelativeCount = compactDecimalFormat.format(commentsCount),
@@ -27,6 +33,8 @@ class PostEntityToPostMapper : Mapper<PostEntity, PostViewState.Post> {
                     DateUtils.getRelativeTimeSpanString(
                         createdAt.toInstant().toEpochMilli(),
                     ).toString(),
+                content = content?.let { contentEntityToViewObjectMapper.map(content) },
+                subreddit = subreddit?.let { subredditEntityToViewObjectMapper.map(it) },
             )
         }
     }
