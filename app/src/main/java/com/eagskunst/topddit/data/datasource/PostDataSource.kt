@@ -15,8 +15,15 @@ class PostDataSource(
     private val mapper: Mapper<PostsListModel, List<PostEntity>>,
 ) : Asyncable {
     suspend fun getPosts(lastPostId: String?): DataResult<List<PostEntity>> {
-        Timber.d("Getting top posts - lastPostId: $lastPostId")
-        return when (val posts = runSafely { service.getTopPosts(lastPostId = lastPostId) }) {
+        // delay(3500)
+        val actualLastPostId =
+            if (lastPostId != null) {
+                "t3_$lastPostId"
+            } else {
+                null
+            }
+        Timber.d("Getting top posts - lastPostId: $actualLastPostId")
+        return when (val posts = runSafely { service.getTopPosts(lastPostId = actualLastPostId) }) {
             is ErrorResult -> ErrorResult(posts.throwable, posts.errorInfo)
             is Success -> Success(mapper.map(posts.data))
         }

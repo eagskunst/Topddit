@@ -3,6 +3,7 @@ package com.eagskunst.topddit.presentation.post.list
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -36,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.eagskunst.topddit.R
+import com.eagskunst.topddit.common.presentation.shimmerEffect
 
 @Composable
 fun Post(
@@ -75,7 +77,11 @@ fun PostTitle(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
-        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(5.dp),
+        ) {
             AsyncImage(
                 model =
                     ImageRequest.Builder(LocalContext.current)
@@ -110,7 +116,7 @@ fun PostContent(
             maxLines = 3,
             overflow = TextOverflow.Ellipsis,
             fontWeight = FontWeight.Bold,
-            fontSize = 16.sp
+            fontSize = 16.sp,
         )
         Spacer(Modifier.height(5.dp))
         if (content != null) {
@@ -166,10 +172,75 @@ fun PostInteraction(
             imageVector = image,
             contentDescription = contentDescription,
             modifier = Modifier.size(15.dp),
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
         )
         Spacer(Modifier.width(2.dp))
         Text(text = interactions, modifier = Modifier)
+    }
+}
+
+@Composable
+fun PostPlaceholder(
+    modifier: Modifier = Modifier,
+    showDivider: Boolean = true,
+) {
+    Column {
+        Column(modifier = modifier) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(5.dp),
+            ) {
+                Box(
+                    modifier =
+                        Modifier
+                            .size(20.dp)
+                            .clip(CircleShape)
+                            .shimmerEffect(),
+                )
+                Box(
+                    modifier =
+                        Modifier
+                            .height(8.dp)
+                            .width(60.dp)
+                            .shimmerEffect(),
+                )
+                Box(
+                    modifier =
+                        Modifier
+                            .height(8.dp)
+                            .width(30.dp)
+                            .shimmerEffect(),
+                )
+            }
+            Box(
+                modifier =
+                    Modifier
+                        .fillMaxWidth(0.95f)
+                        .padding(vertical = 8.dp)
+                        .height(10.dp)
+                        .shimmerEffect(),
+            )
+            Box(
+                modifier =
+                    Modifier
+                        .fillMaxWidth(0.6f)
+                        .height(10.dp)
+                        .shimmerEffect(),
+            )
+            Spacer(Modifier.height(8.dp))
+            Box(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(150.dp)
+                        .clip(AbsoluteRoundedCornerShape(15.dp))
+                        .shimmerEffect(),
+            )
+        }
+        if (showDivider) {
+            Divider(modifier = Modifier.shimmerEffect())
+        }
     }
 }
 
@@ -202,5 +273,15 @@ fun PreviewPost() {
             Modifier
                 .fillMaxWidth()
                 .padding(10.dp),
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewPostPlaceholder() {
+    PostPlaceholder(
+        modifier =
+            Modifier.fillMaxWidth()
+                .padding(vertical = 10.dp, horizontal = 20.dp),
     )
 }

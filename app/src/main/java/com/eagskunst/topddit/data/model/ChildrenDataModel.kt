@@ -148,11 +148,11 @@ data class ChildrenDataModel(
     @SerialName("suggested_sort")
     val suggestedSort: String?,
     @SerialName("thumbnail")
-    val thumbnail: String,
+    val thumbnail: String? = null,
     @SerialName("thumbnail_height")
-    val thumbnailHeight: Int,
+    val thumbnailHeight: Int? = null,
     @SerialName("thumbnail_width")
-    val thumbnailWidth: Int,
+    val thumbnailWidth: Int? = null,
     @SerialName("title")
     val title: String,
     @SerialName("total_awards_received")

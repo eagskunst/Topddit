@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SecureMediaModel(
     @SerialName("reddit_video")
-    val redditVideo: RedditVideoModel,
+    val redditVideo: RedditVideoModel? = null,
 )
