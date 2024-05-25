@@ -28,7 +28,7 @@ class NetworkModule(context: Context) {
             maxSize = CACHE_SIZE,
         )
 
-    val okHttpClient =
+    private val okHttpClient =
         OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .readTimeout(90, TimeUnit.SECONDS)
@@ -36,9 +36,16 @@ class NetworkModule(context: Context) {
             .cache(cacheFile)
             .build()
 
-    val converterFactory = Json.asConverterFactory("application/json; charset=UTF8".toMediaType())
+    private val json =
+        Json {
+            coerceInputValues = true
+            ignoreUnknownKeys = true
+        }
 
-    val retrofitClient =
+    private val converterFactory =
+        json.asConverterFactory("application/json; charset=UTF8".toMediaType())
+
+    val retrofitClient: Retrofit =
         Retrofit.Builder()
             .baseUrl("https://reddit.com")
             .client(okHttpClient)

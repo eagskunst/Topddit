@@ -12,7 +12,7 @@ data class ChildrenDataModel(
     @SerialName("author")
     val author: String,
     @SerialName("author_cakeday")
-    val authorCakeday: Boolean,
+    val authorCakeday: Boolean = false,
     @SerialName("author_flair_type")
     val authorFlairType: String,
     @SerialName("author_fullname")
@@ -34,9 +34,9 @@ data class ChildrenDataModel(
     @SerialName("contest_mode")
     val contestMode: Boolean,
     @SerialName("created")
-    val created: Long,
+    val created: Double,
     @SerialName("created_utc")
-    val createdUtc: Long,
+    val createdUtc: Double,
     @SerialName("domain")
     val domain: String,
     @SerialName("downs")
@@ -44,7 +44,7 @@ data class ChildrenDataModel(
     @SerialName("edited")
     val edited: Boolean,
     @SerialName("gallery_data")
-    val galleryData: GalleryDataModel?,
+    val galleryData: GalleryDataModel? = null,
     @SerialName("gilded")
     val gilded: Int,
     @SerialName("gildings")
@@ -60,7 +60,7 @@ data class ChildrenDataModel(
     @SerialName("is_crosspostable")
     val isCrosspostable: Boolean,
     @SerialName("is_gallery")
-    val isGallery: Boolean,
+    val isGallery: Boolean = false,
     @SerialName("is_meta")
     val isMeta: Boolean,
     @SerialName("is_original_content")
@@ -74,17 +74,17 @@ data class ChildrenDataModel(
     @SerialName("is_video")
     val isVideo: Boolean,
     @SerialName("link_flair_background_color")
-    val linkFlairBackgroundColor: String,
+    val linkFlairBackgroundColor: String? = null,
     @SerialName("link_flair_css_class")
     val linkFlairCssClass: String?,
     @SerialName("link_flair_richtext")
     val linkFlairRichtext: List<LinkFlairRichtextModel>,
     @SerialName("link_flair_template_id")
-    val linkFlairTemplateId: String?,
+    val linkFlairTemplateId: String? = null,
     @SerialName("link_flair_text")
     val linkFlairText: String?,
     @SerialName("link_flair_text_color")
-    val linkFlairTextColor: String,
+    val linkFlairTextColor: String?,
     @SerialName("link_flair_type")
     val linkFlairType: String,
     @SerialName("locked")
@@ -94,7 +94,7 @@ data class ChildrenDataModel(
     @SerialName("media_embed")
     val mediaEmbed: MediaEmbedModel?,
     @SerialName("media_metadata")
-    val mediaMetadata: Map<String, MediaMetadataModel>?,
+    val mediaMetadata: Map<String, MediaMetadataModel>? = null,
     @SerialName("media_only")
     val mediaOnly: Boolean,
     @SerialName("name")
@@ -114,11 +114,11 @@ data class ChildrenDataModel(
     @SerialName("pinned")
     val pinned: Boolean,
     @SerialName("post_hint")
-    val postHint: String?,
+    val postHint: String? = null,
     @SerialName("preview")
-    val preview: PreviewModel?,
+    val preview: PreviewModel? = null,
     @SerialName("pwls")
-    val pwls: Int,
+    val pwls: Int?,
     @SerialName("quarantine")
     val quarantine: Boolean,
     @SerialName("saved")
@@ -166,11 +166,11 @@ data class ChildrenDataModel(
     @SerialName("url")
     val url: String,
     @SerialName("url_overridden_by_dest")
-    val urlOverriddenByDest: String?,
+    val urlOverriddenByDest: String? = null,
     @SerialName("visited")
     val visited: Boolean,
     @SerialName("whitelist_status")
     val whitelistStatus: String?,
     @SerialName("wls")
-    val wls: Int,
+    val wls: Int?,
 )

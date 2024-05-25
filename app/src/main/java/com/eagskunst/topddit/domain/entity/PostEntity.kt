@@ -1,6 +1,6 @@
 package com.eagskunst.topddit.domain.entity
 
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 data class PostEntity(
     val id: String,
@@ -9,6 +9,6 @@ data class PostEntity(
     val author: String,
     val upVotes: Int,
     val commentsCount: Int,
-    val createdAt: LocalDateTime,
+    val createdAt: ZonedDateTime,
     val content: ContentEntity?,
 )

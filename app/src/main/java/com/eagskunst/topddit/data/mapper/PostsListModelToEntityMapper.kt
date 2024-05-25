@@ -7,6 +7,7 @@ import com.eagskunst.topddit.domain.entity.ContentEntity
 import com.eagskunst.topddit.domain.entity.PostEntity
 import java.time.LocalDateTime
 import java.time.ZoneOffset
+import java.time.ZonedDateTime
 
 class PostsListModelToEntityMapper(
     private val contentMapper: Mapper<ChildrenDataModel, ContentEntity>,
@@ -22,7 +23,15 @@ class PostsListModelToEntityMapper(
                 author = post.author,
                 upVotes = post.ups,
                 commentsCount = post.numComments,
-                createdAt = LocalDateTime.ofEpochSecond(post.createdUtc, 0, ZoneOffset.UTC),
+                createdAt =
+                    ZonedDateTime.of(
+                        LocalDateTime.ofEpochSecond(
+                            post.createdUtc.toLong(),
+                            0,
+                            ZoneOffset.UTC,
+                        ),
+                        ZoneOffset.UTC,
+                    ),
                 content = contentMapper.map(post),
             )
         }
