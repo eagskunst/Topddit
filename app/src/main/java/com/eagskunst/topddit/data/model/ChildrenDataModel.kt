@@ -34,9 +34,9 @@ data class ChildrenDataModel(
     @SerialName("contest_mode")
     val contestMode: Boolean,
     @SerialName("created")
-    val created: Int,
+    val created: Long,
     @SerialName("created_utc")
-    val createdUtc: Int,
+    val createdUtc: Long,
     @SerialName("domain")
     val domain: String,
     @SerialName("downs")

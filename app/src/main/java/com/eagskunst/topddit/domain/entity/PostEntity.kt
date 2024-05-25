@@ -10,4 +10,5 @@ data class PostEntity(
     val upVotes: Int,
     val commentsCount: Int,
     val createdAt: LocalDateTime,
+    val content: ContentEntity?,
 )
