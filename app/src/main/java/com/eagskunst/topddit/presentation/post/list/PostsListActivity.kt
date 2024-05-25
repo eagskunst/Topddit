@@ -2,6 +2,8 @@ package com.eagskunst.topddit.presentation.post.list
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -49,12 +52,16 @@ class PostsListActivity : InjectionActivity() {
             }
 
             is PostViewState.Loading -> {
-                PostsLists(posts = (posts as? PostViewState.Loading)?.posts ?: listOf())
-                CircularProgressIndicator(
-                    modifier = Modifier.padding(24.dp),
-                    color = Color.Red,
-                    strokeWidth = 10.dp,
-                )
+                Column {
+                    PostsLists(posts = (posts as? PostViewState.Loading)?.posts ?: listOf())
+                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.padding(24.dp),
+                            color = Color.Red,
+                            strokeWidth = 10.dp,
+                        )
+                    }
+                }
             }
 
             is PostViewState.Posts -> PostsLists((posts as PostViewState.Posts).posts)
@@ -66,7 +73,13 @@ class PostsListActivity : InjectionActivity() {
     private fun PostsLists(posts: List<Post>) {
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             items(posts.size, key = { posts[it].id }) { idx ->
-                Post(post = posts[idx])
+                Post(
+                    post = posts[idx],
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 10.dp, horizontal = 20.dp),
+                )
             }
         }
     }

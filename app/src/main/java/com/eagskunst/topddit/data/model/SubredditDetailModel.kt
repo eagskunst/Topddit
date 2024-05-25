@@ -16,9 +16,9 @@ data class SubredditDetailModel(
     @SerialName("community_icon")
     val communityIcon: String?,
     @SerialName("created")
-    val created: Int?,
+    val created: Double?,
     @SerialName("created_utc")
-    val createdUtc: Int?,
+    val createdUtc: Double?,
     @SerialName("default_set")
     val defaultSet: Boolean = false,
     @SerialName("description")
@@ -34,13 +34,13 @@ data class SubredditDetailModel(
     @SerialName("header_img")
     val headerImg: String?,
     @SerialName("header_size")
-    val headerSize: List<Int?>,
+    val headerSize: List<Int> = listOf(),
     @SerialName("icon_color")
     val iconColor: String?,
     @SerialName("icon_img")
     val iconImg: String?,
     @SerialName("icon_size")
-    val iconSize: List<Int?>,
+    val iconSize: List<Int> = listOf(),
     @SerialName("key_color")
     val keyColor: String?,
     @SerialName("link_flair_enabled")

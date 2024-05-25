@@ -8,7 +8,7 @@ class SubredditDetailModelToEntityMapper : Mapper<SubredditDetailModel, Subreddi
     override suspend fun map(value: SubredditDetailModel): SubredditEntity {
         return SubredditEntity(
             name = value.displayNamePrefixed ?: "",
-            iconUrl = value.iconImg ?: "",
+            iconUrl = value.communityIcon?.split('?')?.firstOrNull() ?: "",
         )
     }
 }
