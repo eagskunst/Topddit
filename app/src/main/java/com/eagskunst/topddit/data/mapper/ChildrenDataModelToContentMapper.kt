@@ -6,9 +6,18 @@ import com.eagskunst.topddit.domain.entity.ContentEntity
 
 class ChildrenDataModelToContentMapper : Mapper<ChildrenDataModel, ContentEntity> {
     override suspend fun map(value: ChildrenDataModel): ContentEntity {
+        val previewImages = value.preview?.images?.firstOrNull()
+        val images =
+            previewImages?.resolutions?.map { it.url }
+                ?.filter { it.contains("https://", ignoreCase = true) }
+                // or
+                ?: value.mediaMetadata?.map { (_, v) ->
+                    v?.p?.lastOrNull()?.u ?: ""
+                }?.filter { it.contains("https://", ignoreCase = true) }
+
         return ContentEntity(
             selfText = value.selftext,
-            imagesUrls = value.preview?.images?.firstOrNull()?.resolutions?.map { it.url },
+            imagesUrls = images,
             videoUrl = value.media?.redditVideo?.fallbackUrl,
         )
     }

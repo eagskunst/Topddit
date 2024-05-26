@@ -177,4 +177,6 @@ data class ChildrenDataModel(
     val subredditDetail: SubredditDetailModel? = null,
     @SerialName("body")
     val body: String? = null,
+    @SerialName("media_metadata")
+    val mediaMetadata: Map<String, MediaMetadataModel?>? = null,
 )

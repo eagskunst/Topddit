@@ -26,7 +26,6 @@ class PostDetailViewModel(
         subredditName: String,
         postId: String,
     ) {
-        _postDetail.value = PostDetailViewState.Loading
         viewModelScope.launch {
             val params = GetPostDetail.Params(subredditId = subredditName, postId = postId)
             val postDetail = getPostDetail(params)
@@ -43,5 +42,9 @@ class PostDetailViewModel(
                     }
                 }
         }
+    }
+
+    fun restoreInitialState() {
+        _postDetail.value = PostDetailViewState.Loading
     }
 }

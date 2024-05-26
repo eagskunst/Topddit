@@ -6,15 +6,15 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class MediaMetadataModel(
     @SerialName("e")
-    val e: String,
+    val e: String? = null,
     @SerialName("id")
-    val id: String,
+    val id: String? = null,
     @SerialName("m")
-    val m: String,
+    val m: String? = null,
     @SerialName("p")
-    val p: List<PModel>,
+    val p: List<PModel>? = null,
     @SerialName("s")
-    val s: SModel,
+    val s: SModel? = null,
     @SerialName("status")
-    val status: String,
+    val status: String? = null,
 )

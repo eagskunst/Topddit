@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -16,7 +15,8 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.eagskunst.topddit.common.presentation.commonPostModifier
+import com.eagskunst.topddit.presentation.common.ErrorComponent
+import com.eagskunst.topddit.presentation.common.commonPostModifier
 
 private const val BUFFER = 1
 
@@ -35,7 +35,13 @@ fun PostsStates(
                 onPostClick = onPostClick,
                 lazyListState = lazyListState,
                 posts = (posts as? PostViewState.GeneralError)?.posts ?: listOf(),
-                footer = { Text("Error :(") }, // todo make general error component}
+                footer = {
+                    ErrorComponent(
+                        errorMessage =
+                            (posts as PostViewState.GeneralError).error.message
+                                ?: "Unknown error",
+                    )
+                },
             )
         }
 

@@ -1,6 +1,4 @@
-package com.eagskunst.topddit.common.presentation
-
-import android.text.TextUtils.replace
+package com.eagskunst.topddit.presentation.common
 
 sealed class Routes(val name: String) {
     data object List : Routes("list")

@@ -1,5 +1,6 @@
 package com.eagskunst.topddit.data.model
 
+import com.eagskunst.topddit.common.JsonAsStringSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -12,5 +13,6 @@ data class ImageModel(
     @SerialName("source")
     val source: SourceModel,
     @SerialName("variants")
-    val variants: Map<String, String>?,
+    @Serializable(with = JsonAsStringSerializer::class)
+    val variants: String?,
 )

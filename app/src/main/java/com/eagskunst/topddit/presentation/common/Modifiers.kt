@@ -1,4 +1,4 @@
-package com.eagskunst.topddit.common.presentation
+package com.eagskunst.topddit.presentation.common
 
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable

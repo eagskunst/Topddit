@@ -33,12 +33,13 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.eagskunst.topddit.R
-import com.eagskunst.topddit.common.presentation.shimmerEffect
+import com.eagskunst.topddit.presentation.common.shimmerEffect
 
 @Composable
 fun Post(
@@ -129,7 +130,7 @@ fun PostContent(
         Text(
             text = title,
             modifier = Modifier.fillMaxWidth(),
-            maxLines = 3,
+            maxLines = if (multiContent) Integer.MAX_VALUE else 3,
             overflow = TextOverflow.Ellipsis,
             fontWeight = FontWeight.Bold,
             fontSize = 16.sp,
@@ -155,7 +156,7 @@ fun PostContent(
                     modifier =
                         Modifier
                             .fillMaxWidth()
-                            .heightIn(max = 350.dp)
+                            .heightIn(max = if (!multiContent) 350.dp else Dp.Unspecified)
                             .clip(AbsoluteRoundedCornerShape(15.dp)),
                 )
             }
@@ -164,9 +165,9 @@ fun PostContent(
                     PostType.TEXT_WITH_IMAGE,
                     PostType.TEXT_WITH_VIDEO,
                     PostType.TEXT,
-                )
+                ) && !content.selfText.isNullOrBlank()
             ) {
-                Text(text = content.selfText ?: "", fontSize = 12.sp)
+                Text(text = content.selfText, fontSize = 12.sp)
             }
         }
     }

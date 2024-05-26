@@ -13,10 +13,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.eagskunst.topddit.TopdditApp
-import com.eagskunst.topddit.common.presentation.InjectionAssistant
-import com.eagskunst.topddit.common.presentation.Routes
-import com.eagskunst.topddit.common.presentation.commonPostModifier
 import com.eagskunst.topddit.di.AppContainer
+import com.eagskunst.topddit.presentation.common.InjectionAssistant
+import com.eagskunst.topddit.presentation.common.Routes
+import com.eagskunst.topddit.presentation.common.commonPostModifier
 import com.eagskunst.topddit.presentation.post.detail.PostDetailViewModel
 import com.eagskunst.topddit.presentation.post.detail.PostDetailViewState
 import com.eagskunst.topddit.presentation.post.list.PostListViewModel
@@ -85,7 +85,12 @@ class MainActivity : ComponentActivity() {
                 val subredditName = navBackStackEntry.arguments!!.getString("subredditName")!!
                 val postId = navBackStackEntry.arguments!!.getString("postId")!!
                 val viewModel = getViewModel(PostDetailViewModel::class.java)
-                PostDetailViewState(viewModel = viewModel, modifier = Modifier.commonPostModifier())
+                PostDetailViewState(
+                    viewModel = viewModel,
+                    modifier = Modifier.commonPostModifier(),
+                ) {
+                    navController.popBackStack()
+                }
                 viewModel.requestPostDetail(subredditName, postId)
             }
         }

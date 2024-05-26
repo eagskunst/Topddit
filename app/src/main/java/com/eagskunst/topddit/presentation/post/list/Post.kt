@@ -38,13 +38,13 @@ data class Content(
 ) : Parcelable {
     val type: PostType
         get() {
-            return if (selfText != null && videoUrl != null) {
+            return if (!selfText.isNullOrBlank() && videoUrl != null) {
                 PostType.TEXT_WITH_VIDEO
-            } else if (selfText != null && imagesUrl != null) {
+            } else if (!selfText.isNullOrBlank() && !imagesUrl.isNullOrEmpty()) {
                 PostType.TEXT_WITH_IMAGE
             } else if (videoUrl != null) {
                 PostType.VIDEO
-            } else if (imagesUrl != null) {
+            } else if (!imagesUrl.isNullOrEmpty()) {
                 PostType.IMAGE
             } else {
                 PostType.TEXT

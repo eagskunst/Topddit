@@ -1,6 +1,7 @@
 package com.eagskunst.topddit.presentation.post.detail
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,11 +16,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -31,8 +35,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.eagskunst.topddit.R
-import com.eagskunst.topddit.common.presentation.commonPostModifier
-import com.eagskunst.topddit.common.presentation.shimmerEffect
+import com.eagskunst.topddit.presentation.common.ErrorComponent
+import com.eagskunst.topddit.presentation.common.commonPostModifier
+import com.eagskunst.topddit.presentation.common.shimmerEffect
 import com.eagskunst.topddit.presentation.post.list.Comment
 import com.eagskunst.topddit.presentation.post.list.Content
 import com.eagskunst.topddit.presentation.post.list.Post
@@ -45,20 +50,42 @@ import com.eagskunst.topddit.ui.theme.TopdditTheme
 fun PostDetailViewState(
     viewModel: PostDetailViewModel,
     modifier: Modifier = Modifier,
+    backNavigation: () -> Unit = {},
 ) {
     val state by viewModel.postDetail.observeAsState()
     val lazyListState = rememberLazyListState()
-    when (state) {
-        is PostDetailViewState.GeneralError -> {
-            Text("Error :(") // todo make general error component}
+    DisposableEffect(Unit) {
+        onDispose {
+            viewModel.restoreInitialState()
         }
+    }
+    Column {
+        Icon(
+            Icons.Default.ArrowBack,
+            contentDescription = "back",
+            modifier = Modifier.clickable { backNavigation() }.padding(10.dp),
+        )
+        Divider()
+        when (state) {
+            is PostDetailViewState.GeneralError -> {
+                ErrorComponent(
+                    errorMessage =
+                        (state as PostDetailViewState.GeneralError).error.message
+                            ?: "Unknown error",
+                )
+            }
 
-        PostDetailViewState.Loading -> PostDetailPlaceholder()
-        is PostDetailViewState.Success -> {
-            PostDetail((state as PostDetailViewState.Success).post, lazyListState, modifier)
+            PostDetailViewState.Loading -> PostDetailPlaceholder()
+            is PostDetailViewState.Success -> {
+                PostDetail(
+                    post = (state as PostDetailViewState.Success).post,
+                    lazyListState = lazyListState,
+                    modifier = modifier,
+                )
+            }
+
+            null -> Spacer(modifier = Modifier)
         }
-
-        null -> Spacer(modifier = Modifier)
     }
 }
 
