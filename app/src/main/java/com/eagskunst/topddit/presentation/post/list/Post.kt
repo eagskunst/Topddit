@@ -13,6 +13,7 @@ data class Post(
     val humanCreatedDate: String,
     val subreddit: Subreddit?,
     val content: Content?,
+    val comments: List<Comment>,
 ) : Parcelable
 
 @Parcelize
@@ -25,6 +26,8 @@ enum class PostType {
     TEXT,
     VIDEO,
     IMAGE,
+    TEXT_WITH_IMAGE,
+    TEXT_WITH_VIDEO,
 }
 
 @Parcelize
@@ -35,7 +38,11 @@ data class Content(
 ) : Parcelable {
     val type: PostType
         get() {
-            return if (videoUrl != null) {
+            return if (selfText != null && videoUrl != null) {
+                PostType.TEXT_WITH_VIDEO
+            } else if (selfText != null && imagesUrl != null) {
+                PostType.TEXT_WITH_IMAGE
+            } else if (videoUrl != null) {
                 PostType.VIDEO
             } else if (imagesUrl != null) {
                 PostType.IMAGE
@@ -44,3 +51,12 @@ data class Content(
             }
         }
 }
+
+@Parcelize
+data class Comment(
+    val id: String,
+    val authorName: String,
+    val upVotesRelativeCount: String,
+    val humanCreatedDate: String,
+    val content: Content?,
+) : Parcelable

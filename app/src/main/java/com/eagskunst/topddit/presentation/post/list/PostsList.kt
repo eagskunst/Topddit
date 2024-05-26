@@ -16,12 +16,14 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.eagskunst.topddit.common.presentation.commonPostModifier
 
 private const val BUFFER = 1
 
 @Composable
 fun PostsStates(
     viewModel: PostListViewModel,
+    postPlaceholderCount: Int = 3,
     onPostClick: (Post) -> Unit = {},
 ) {
     val posts by viewModel.posts.observeAsState()
@@ -45,23 +47,14 @@ fun PostsStates(
                 posts = (posts as? PostViewState.Loading)?.posts ?: listOf(),
                 footer = {
                     Column {
-                        PostPlaceholder(
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 10.dp, horizontal = 20.dp),
-                        )
-                        PostPlaceholder(
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 10.dp, horizontal = 20.dp),
-                        )
-                        PostPlaceholder(
-                            showDivider = false,
-                            modifier =
+                        repeat(postPlaceholderCount) {
+                            PostPlaceholder(
                                 Modifier
                                     .fillMaxWidth()
                                     .padding(vertical = 10.dp, horizontal = 20.dp),
-                        )
+                                showDivider = it != postPlaceholderCount - 1,
+                            )
+                        }
                     }
                 },
             )
@@ -83,6 +76,7 @@ fun PostsStates(
 fun PostsLists(
     lazyListState: LazyListState,
     posts: List<Post>,
+    modifier: Modifier = Modifier.fillMaxWidth(),
     onBottomReached: (Boolean) -> Unit = {},
     onPostClick: (Post) -> Unit = {},
     header: @Composable () -> Unit = {},
@@ -98,15 +92,12 @@ fun PostsLists(
     LaunchedEffect(reachedBottom) {
         onBottomReached(reachedBottom)
     }
-    LazyColumn(modifier = Modifier.fillMaxWidth(), state = lazyListState) {
+    LazyColumn(modifier = modifier, state = lazyListState) {
         item { header() }
         items(posts.size, key = { posts[it].id }) { idx ->
             Post(
                 post = posts[idx],
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 10.dp, horizontal = 20.dp),
+                modifier = Modifier.commonPostModifier(),
                 onPostClick = onPostClick,
             )
         }

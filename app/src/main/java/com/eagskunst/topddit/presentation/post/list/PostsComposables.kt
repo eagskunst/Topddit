@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -43,7 +44,9 @@ import com.eagskunst.topddit.common.presentation.shimmerEffect
 fun Post(
     post: Post,
     modifier: Modifier = Modifier,
+    showAuthor: Boolean = false,
     showDivider: Boolean = true,
+    multiContent: Boolean = false,
     onPostClick: (Post) -> Unit = {},
 ) {
     Column(modifier = Modifier.clickable(onClick = { onPostClick(post) })) {
@@ -52,10 +55,12 @@ fun Post(
                 subreddit = post.subreddit?.name ?: "",
                 iconUrl = post.subreddit?.icon,
                 humanCreatedDate = post.humanCreatedDate,
+                authorName = if (showAuthor) post.authorName else null,
             )
             PostContent(
                 title = post.title,
                 content = post.content,
+                multiContent = multiContent,
                 modifier = Modifier.padding(vertical = 5.dp),
             )
             PostInteractions(
@@ -75,6 +80,7 @@ fun PostTitle(
     humanCreatedDate: String,
     iconUrl: String?,
     modifier: Modifier = Modifier,
+    authorName: String? = null,
 ) {
     Column(modifier = modifier) {
         Row(
@@ -98,7 +104,16 @@ fun PostTitle(
                         .clip(CircleShape),
             )
             Text(text = subreddit, fontSize = 12.sp)
-            Text(text = humanCreatedDate, fontSize = 12.sp, fontWeight = FontWeight.Light)
+            if (authorName == null) {
+                Text(text = humanCreatedDate, fontSize = 12.sp, fontWeight = FontWeight.Light)
+            }
+        }
+        if (authorName != null) {
+            Text(
+                text = "$authorName · $humanCreatedDate",
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Light,
+            )
         }
     }
 }
@@ -107,6 +122,7 @@ fun PostTitle(
 fun PostContent(
     title: String,
     content: Content?,
+    multiContent: Boolean = false,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -120,23 +136,37 @@ fun PostContent(
         )
         Spacer(Modifier.height(5.dp))
         if (content != null) {
-            when (content.type) {
-                PostType.TEXT -> Spacer(Modifier)
-                PostType.VIDEO, PostType.IMAGE ->
-                    AsyncImage(
-                        model =
-                            ImageRequest.Builder(LocalContext.current)
-                                .data(content.imagesUrl?.lastOrNull())
-                                .crossfade(true)
-                                .build(),
-                        contentDescription = "image_for_post",
-                        contentScale = ContentScale.Crop,
-                        modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .height(150.dp)
-                                .clip(AbsoluteRoundedCornerShape(15.dp)),
-                    )
+            if (content.type in
+                listOf(
+                    PostType.VIDEO,
+                    PostType.IMAGE,
+                    PostType.TEXT_WITH_IMAGE,
+                    PostType.TEXT_WITH_VIDEO,
+                )
+            ) {
+                AsyncImage(
+                    model =
+                        ImageRequest.Builder(LocalContext.current)
+                            .data(content.imagesUrl?.lastOrNull())
+                            .crossfade(true)
+                            .build(),
+                    contentDescription = "image_for_post",
+                    contentScale = ContentScale.Crop,
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .heightIn(max = 350.dp)
+                            .clip(AbsoluteRoundedCornerShape(15.dp)),
+                )
+            }
+            if (multiContent && content.type in
+                listOf(
+                    PostType.TEXT_WITH_IMAGE,
+                    PostType.TEXT_WITH_VIDEO,
+                    PostType.TEXT,
+                )
+            ) {
+                Text(text = content.selfText ?: "", fontSize = 12.sp)
             }
         }
     }
@@ -146,17 +176,19 @@ fun PostContent(
 fun PostInteractions(
     modifier: Modifier = Modifier,
     upVotes: String,
-    commentsCount: String,
+    commentsCount: String? = null,
 ) {
     Row(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(20.dp)) {
         PostInteraction(
             image = Icons.Filled.ThumbUp,
             interactions = upVotes,
         )
-        PostInteraction(
-            image = ImageVector.vectorResource(id = R.drawable.ic_comment),
-            interactions = commentsCount,
-        )
+        if (commentsCount != null) {
+            PostInteraction(
+                image = ImageVector.vectorResource(id = R.drawable.ic_comment),
+                interactions = commentsCount,
+            )
+        }
     }
 }
 
@@ -266,6 +298,7 @@ fun PreviewPost() {
                     imagesUrl = null,
                     videoUrl = null,
                 ),
+            comments = listOf(),
         )
     Post(
         post = post,
