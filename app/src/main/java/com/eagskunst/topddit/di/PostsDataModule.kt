@@ -1,6 +1,7 @@
 package com.eagskunst.topddit.di
 
 import com.eagskunst.topddit.data.datasource.PostDataSource
+import com.eagskunst.topddit.domain.interactor.GetPostDetail
 import com.eagskunst.topddit.domain.interactor.GetPosts
 
 class PostsDataModule(
@@ -11,8 +12,11 @@ class PostsDataModule(
     private val postDataSource =
         PostDataSource(
             service = serviceModule.postService,
-            mapper = mapperModule.postsListModelToEntityMapper,
+            postListMapper = mapperModule.postsListModelToEntityMapper,
+            postDetailMapper = mapperModule.postListToEntityWithCommentsMapper,
         )
 
     val getPostsInteractor = GetPosts(postDataSource, threadModule.dispatchers)
+
+    val getPostDetailInteractor = GetPostDetail(postDataSource, threadModule.dispatchers)
 }

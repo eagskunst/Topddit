@@ -1,15 +1,14 @@
 package com.eagskunst.topddit.data.mapper
 
 import com.eagskunst.topddit.common.Mapper
+import com.eagskunst.topddit.common.extensions.toZonedDateTime
 import com.eagskunst.topddit.data.model.ChildrenDataModel
 import com.eagskunst.topddit.data.model.PostsListModel
 import com.eagskunst.topddit.data.model.SubredditDetailModel
 import com.eagskunst.topddit.domain.entity.ContentEntity
 import com.eagskunst.topddit.domain.entity.PostEntity
 import com.eagskunst.topddit.domain.entity.SubredditEntity
-import java.time.LocalDateTime
-import java.time.ZoneOffset
-import java.time.ZonedDateTime
+import kotlinx.serialization.json.JsonNull.content
 
 class PostsListModelToEntityMapper(
     private val contentMapper: Mapper<ChildrenDataModel, ContentEntity>,
@@ -21,19 +20,11 @@ class PostsListModelToEntityMapper(
         }.map { post ->
             PostEntity(
                 id = post.id,
-                title = post.title,
-                author = post.author,
-                upVotes = post.ups,
-                commentsCount = post.numComments,
-                createdAt =
-                    ZonedDateTime.of(
-                        LocalDateTime.ofEpochSecond(
-                            post.createdUtc.toLong(),
-                            0,
-                            ZoneOffset.UTC,
-                        ),
-                        ZoneOffset.UTC,
-                    ),
+                title = post.title ?: "",
+                author = post.author ?: "",
+                upVotes = post.ups ?: 0,
+                commentsCount = post.numComments ?: 0,
+                createdAt = post.createdUtc.toZonedDateTime(),
                 content = contentMapper.map(post),
                 subreddit = post.subredditDetail?.let { subredditsMapper.map(it) },
             )

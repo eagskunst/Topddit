@@ -7,6 +7,6 @@ class AppContainer(context: Context) {
     private val mapperModule = MapperModule()
     private val networkModule = NetworkModule(context)
     private val serviceModule = ServiceModule(networkModule)
-    private val postsDataModule = PostsDataModule(serviceModule, mapperModule, threadModule)
+    val postsDataModule = PostsDataModule(serviceModule, mapperModule, threadModule)
     val postListPresentationModule = PostsListPresentationModule(postsDataModule, mapperModule)
 }

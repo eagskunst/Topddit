@@ -36,7 +36,11 @@ class PostsListPresentationModule(
             modelClass: Class<T>,
             extras: CreationExtras,
         ): T {
-            return PostListViewModel(extras.createSavedStateHandle(), getPosts, mapper) as T
+            return PostListViewModel(
+                savedStateHandle = extras.createSavedStateHandle(),
+                getPosts = getPosts,
+                mapper = mapper,
+            ) as T
         }
     }
 

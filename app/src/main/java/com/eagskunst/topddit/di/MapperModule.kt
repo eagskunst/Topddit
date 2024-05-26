@@ -1,6 +1,8 @@
 package com.eagskunst.topddit.di
 
+import com.eagskunst.topddit.data.mapper.ChildrenDataModelToCommentEntityMapper
 import com.eagskunst.topddit.data.mapper.ChildrenDataModelToContentMapper
+import com.eagskunst.topddit.data.mapper.PostListToEntityWithCommentsMapper
 import com.eagskunst.topddit.data.mapper.PostsListModelToEntityMapper
 import com.eagskunst.topddit.data.mapper.SubredditDetailModelToEntityMapper
 import com.eagskunst.topddit.presentation.mapper.ContentEntityToViewObjectMapper
@@ -19,4 +21,10 @@ class MapperModule {
     private val subredditEntityToViewObjectMapper = SubredditEntityToViewObjectMapper()
     val postEntityToPostMapper =
         PostEntityToPostMapper(contentEntityToViewObjectMapper, subredditEntityToViewObjectMapper)
+    private val childrenDataModelToCommentEntityMapper = ChildrenDataModelToCommentEntityMapper()
+    val postListToEntityWithCommentsMapper =
+        PostListToEntityWithCommentsMapper(
+            postsListModelToEntityMapper,
+            childrenDataModelToCommentEntityMapper,
+        )
 }
