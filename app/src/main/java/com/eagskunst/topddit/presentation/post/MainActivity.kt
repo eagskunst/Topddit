@@ -1,55 +1,64 @@
-package com.eagskunst.topddit.presentation.post.list
+package com.eagskunst.topddit.presentation.post
 
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.eagskunst.topddit.common.presentation.InjectionActivity
+import com.eagskunst.topddit.TopdditApp
+import com.eagskunst.topddit.common.presentation.InjectionAssistant
 import com.eagskunst.topddit.common.presentation.Routes
+import com.eagskunst.topddit.common.presentation.commonPostModifier
 import com.eagskunst.topddit.di.AppContainer
+import com.eagskunst.topddit.presentation.post.detail.PostDetailViewModel
+import com.eagskunst.topddit.presentation.post.detail.PostDetailViewState
+import com.eagskunst.topddit.presentation.post.list.PostListViewModel
+import com.eagskunst.topddit.presentation.post.list.PostsStates
 import com.eagskunst.topddit.ui.theme.TopdditTheme
 import timber.log.Timber
 
-class MainActivity : InjectionActivity() {
-    private lateinit var viewModel: PostListViewModel
-
-    override fun inject(
-        appContainer: AppContainer,
-        savedInstanceState: Bundle?,
-    ) {
-        val factory = appContainer.postListPresentationModule.createViewModelFactory(this)
-        viewModel = factory.create(PostListViewModel::class.java)
-    }
+class MainActivity : ComponentActivity() {
+    private lateinit var viewModelProvider: ViewModelProvider
+    private lateinit var injectionAssistant: InjectionAssistant
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.getTopPosts()
+        inject()
         setContent {
             TopdditTheme {
-                TopddittNavGraph()
+                TopdditNavGraph()
             }
         }
     }
 
+    private fun inject() {
+        val appContainer: AppContainer = (application as TopdditApp).appContainer
+        injectionAssistant = InjectionAssistant(appContainer, this)
+        val viewModelFactory = injectionAssistant.getViewModelFactory()
+        viewModelProvider = ViewModelProvider(this, viewModelFactory)
+    }
+
+    private fun <T : ViewModel> getViewModel(viewModelClass: Class<T>): T {
+        return viewModelProvider[viewModelClass]
+    }
+
     @Composable
-    fun TopddittNavGraph() {
+    fun TopdditNavGraph() {
         val navController = rememberNavController()
         navController.addOnDestinationChangedListener { _, destination, _ ->
             Timber.i("Navigating to: ${destination.route}")
         }
         NavHost(navController = navController, startDestination = Routes.List.name) {
             composable(Routes.List.name) {
+                val viewModel = getViewModel(PostListViewModel::class.java)
+                viewModel.getTopPosts()
                 PostsStates(viewModel = viewModel) {
                     navController.navigate(
                         Routes.Detail.routeLink(
@@ -75,12 +84,9 @@ class MainActivity : InjectionActivity() {
             ) { navBackStackEntry ->
                 val subredditName = navBackStackEntry.arguments!!.getString("subredditName")!!
                 val postId = navBackStackEntry.arguments!!.getString("postId")!!
-                Box(modifier = Modifier.fillMaxSize().background(Color.Blue)) {
-                    Text(
-                        text = "Pantalla detail - subredditName: $subredditName, postId: $postId",
-                        modifier = Modifier.align(Alignment.Center),
-                    )
-                }
+                val viewModel = getViewModel(PostDetailViewModel::class.java)
+                PostDetailViewState(viewModel = viewModel, modifier = Modifier.commonPostModifier())
+                viewModel.requestPostDetail(subredditName, postId)
             }
         }
     }

@@ -5,6 +5,8 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -16,6 +18,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.dp
 
 fun Modifier.shimmerEffect() =
     composed {
@@ -51,3 +54,5 @@ fun Modifier.shimmerEffect() =
             size = it.size
         }
     }
+
+fun Modifier.commonPostModifier() = fillMaxWidth().padding(vertical = 10.dp, horizontal = 20.dp)

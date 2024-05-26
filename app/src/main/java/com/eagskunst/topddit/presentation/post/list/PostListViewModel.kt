@@ -50,9 +50,10 @@ class PostListViewModel(
 
     private fun addAndPostNewPosts(newPosts: List<Post>) {
         val loadedPosts = getLoadedPosts()
-        _posts.value = PostViewState.Posts(loadedPosts + newPosts)
+        val actualNewPosts = newPosts.filter { !loadedPosts.contains(it) }
+        _posts.value = PostViewState.Posts(loadedPosts + actualNewPosts)
         savedStateHandle[LAST_POST_ID_KEY] = newPosts.lastOrNull()?.id
-        savedStateHandle[POSTS_KEY] = loadedPosts + newPosts
+        savedStateHandle[POSTS_KEY] = loadedPosts + actualNewPosts
         Timber.d("Posts Result: ${posts.value}")
     }
 

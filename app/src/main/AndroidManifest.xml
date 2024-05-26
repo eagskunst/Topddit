@@ -18,7 +18,7 @@
         android:theme="@style/Theme.Topddit"
         tools:targetApi="31" >
         <activity
-            android:name=".presentation.post.list.MainActivity"
+            android:name=".presentation.post.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Topddit" >
