@@ -44,9 +44,9 @@ fun Post(
     post: Post,
     modifier: Modifier = Modifier,
     showDivider: Boolean = true,
-    onPostClick: () -> Unit = {},
+    onPostClick: (Post) -> Unit = {},
 ) {
-    Column(modifier = Modifier.clickable(onClick = onPostClick)) {
+    Column(modifier = Modifier.clickable(onClick = { onPostClick(post) })) {
         Column(modifier = modifier) {
             PostTitle(
                 subreddit = post.subreddit?.name ?: "",

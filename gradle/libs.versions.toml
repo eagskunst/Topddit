@@ -13,6 +13,7 @@ okHttpBom = "4.12.0"
 kotlinxSerialization = "1.6.3"
 coroutines = "1.8.1"
 coil = "2.6.0"
+navigation = "2.7.7"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -30,6 +31,7 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 retrofit-bom = { group = "com.squareup.retrofit2", name = "retrofit-bom", version.ref = "retrofitBom" }
 retrofit-client = { group = "com.squareup.retrofit2", name = "retrofit" }
 retrofit-adapter-kotlinx = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization" }
